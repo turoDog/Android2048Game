@@ -30,6 +30,8 @@ public class GameView extends GridLayout {
     }
 
     private void initGameView() {
+        setColumnCount(4);      //游戏界面一共四列
+        setBackgroundColor(0xffbbada0);  //游戏背景颜色
         setOnTouchListener(new OnTouchListener() {
 
             private float startX, startY, offsetX, offsetY;
@@ -69,6 +71,30 @@ public class GameView extends GridLayout {
 
     }
 
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+
+        int cardWidth = (Math.min(w, h)-10)/4;  //求屏幕宽高的最小值，分割出每块卡片的宽度
+
+        addCards(cardWidth,cardWidth);          //添加卡片方法
+
+    }
+
+    private void addCards(int cardWidth, int cardHeight){
+        Card c;
+        for (int y = 0; y < 4; y++){
+            for (int x =0; x < 4; x++ ){
+                c = new Card(getContext());
+                c.setNum(2);
+                addView(c, cardWidth, cardHeight);//添加16个卡片到GameView中
+
+                cardMap[x][y] = c;
+            }
+        }
+
+    }
+
     private void slideLeft() {
 
     }
@@ -83,6 +109,8 @@ public class GameView extends GridLayout {
     private void slideDown() {
 
     }
+
+    private Card[][] cardMap = new Card[4][4];
 
 }
 

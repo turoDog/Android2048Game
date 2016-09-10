@@ -1,6 +1,7 @@
 package com.turo.game2048;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -13,9 +14,12 @@ public class Card extends FrameLayout{
         super(context);
 
         label = new TextView(getContext());
-        label.setTextSize(32);
+        label.setTextSize(32);      //卡片字体大小
+        label.setBackgroundColor(0x33ffffff);//卡片背景颜色
+        label.setGravity(Gravity.CENTER);   //游戏主界面位于屏幕正中间
 
-        LayoutParams lp = new LayoutParams(-1,-1);
+        LayoutParams lp = new LayoutParams(-1,-1);  //填充满整个父级容器
+        lp.setMargins(10, 10, 0, 0);        //每个卡片之间的间隔
         addView(label, lp);
 
         setNum(0);
