@@ -102,12 +102,20 @@ public class GameView extends GridLayout {
     }
 
     private void startGame(){
+
+        //每次启动游戏清理卡片中的数字
         for (int y = 0; y < 4; y++){
             for (int x=0; x<4; x++){
                 cardMap[x][y].setNum(0);
             }
         }
 
+        addRandomNum();
+        addRandomNum();
+        addRandomNum();
+        addRandomNum();
+        addRandomNum();
+        addRandomNum();
         addRandomNum();
         addRandomNum();
     }
@@ -121,22 +129,102 @@ public class GameView extends GridLayout {
                 }
             }
         }
+        //每次循环结束随机取出一个点，并将其中2,4按9:1的比例随机显示在卡片中
         Point p = emptyPoints.remove((int) ((Math.random()*emptyPoints.size())));
         cardMap[p.x][p.y].setNum(Math.random()>0.1?2:4);
     }
 
     private void slideLeft() {
+        for(int y =0; y<4; y++){
+            for (int x=0; x<4; x++){
+
+                for (int x1 =x+1; x1<4; x1++){
+
+                    if (cardMap[x1][y].getNum() > 0) {
+                        if (cardMap[x][y].getNum() <= 0) {
+                            cardMap[x][y].setNum(cardMap[x1][y].getNum());
+                            cardMap[x1][y].setNum(0);
+                            x--;
+                            break;
+                        } else if (cardMap[x][y].equals(cardMap[x1][y])) {
+                            cardMap[x][y].setNum(cardMap[x][y].getNum() * 2);
+                            cardMap[x1][y].setNum(0);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
 
     }
 
     private void slideRight() {
+        for(int y =0; y<4; y++){
+            for (int x=3; x>=0; x--){
+
+                for (int x1 =x-1; x1>=0; x1--){
+
+                    if (cardMap[x1][y].getNum() > 0) {
+                        if (cardMap[x][y].getNum() <= 0) {
+                            cardMap[x][y].setNum(cardMap[x1][y].getNum());
+                            cardMap[x1][y].setNum(0);
+                            x++;
+                            break;
+                        } else if (cardMap[x][y].equals(cardMap[x1][y])) {
+                            cardMap[x][y].setNum(cardMap[x][y].getNum() * 2);
+                            cardMap[x1][y].setNum(0);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void slideUp(){
+        for(int x =0; x<4; x++){
+            for (int y=0; y<4; y++){
 
+                for (int y1 =y+1; y1<4; y1++){
+
+                    if (cardMap[x][y1].getNum() > 0) {
+                        if (cardMap[x][y].getNum() <= 0) {
+                            cardMap[x][y].setNum(cardMap[x][y1].getNum());
+                            cardMap[x][y1].setNum(0);
+                            y--;
+                            break;
+                        } else if (cardMap[x][y].equals(cardMap[x][y1])) {
+                            cardMap[x][y].setNum(cardMap[x][y].getNum() * 2);
+                            cardMap[x][y1].setNum(0);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void slideDown() {
+        for(int x =0; x<4; x++){
+            for (int y=3; y>=0; y--){
+
+                for (int y1 =y-1; y1>=0; y1--){
+
+                    if (cardMap[x][y1].getNum() > 0) {
+                        if (cardMap[x][y].getNum() <= 0) {
+                            cardMap[x][y].setNum(cardMap[x][y1].getNum());
+                            cardMap[x][y1].setNum(0);
+                            y++;
+                            break;
+                        } else if (cardMap[x][y].equals(cardMap[x][y1])) {
+                            cardMap[x][y].setNum(cardMap[x][y].getNum() * 2);
+                            cardMap[x][y1].setNum(0);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
 
     }
 
