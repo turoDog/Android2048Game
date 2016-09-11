@@ -1,6 +1,8 @@
 package com.turo.game2048;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Point;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -87,6 +89,12 @@ public class GameView extends GridLayout {
 
     }
 
+
+    /**
+     * 添加卡片逻辑函数
+     * @param cardWidth
+     * @param cardHeight
+     */
     private void addCards(int cardWidth, int cardHeight){
         Card c;
         for (int y = 0; y < 4; y++){
@@ -101,6 +109,9 @@ public class GameView extends GridLayout {
 
     }
 
+    /***
+     * 开始游戏及初始化游戏逻辑函数
+     */
     private void startGame(){
 
         MainActivity.getMainActivity().clearScore();
@@ -116,6 +127,10 @@ public class GameView extends GridLayout {
         addRandomNum();
     }
 
+
+    /***
+     * 添加随机数逻辑函数
+     */
     private void addRandomNum (){
         emptyPoints.clear();
         for (int y = 0; y < 4; y++){
@@ -130,6 +145,10 @@ public class GameView extends GridLayout {
         cardMap[p.x][p.y].setNum(Math.random()>0.1?2:4);
     }
 
+
+    /**
+     * 向左滑动逻辑函数
+     */
     private void slideLeft() {
 
         boolean merge = false;
@@ -160,10 +179,15 @@ public class GameView extends GridLayout {
 
         if (merge){
             addRandomNum();
+            checkComplete();
         }
 
     }
 
+
+    /**
+     * 向右滑动逻辑函数
+     */
     private void slideRight() {
 
         boolean merge = false;
@@ -194,9 +218,14 @@ public class GameView extends GridLayout {
 
         if (merge){
             addRandomNum();
+            checkComplete();
         }
     }
 
+
+    /**
+     * 向上滑动逻辑函数
+     */
     private void slideUp(){
 
         boolean merge = false;
@@ -227,12 +256,17 @@ public class GameView extends GridLayout {
 
         if (merge){
             addRandomNum();
+            checkComplete();
         }
     }
 
+
+    /**
+     * 向下滑动逻辑函数
+     */
     private void slideDown() {
 
-        boolean merge = false;
+        boolean merge = false;//判断是否滑动标志位
 
         for(int x =0; x<4; x++){
             for (int y=3; y>=0; y--){
@@ -258,8 +292,43 @@ public class GameView extends GridLayout {
             }
         }
 
+        //如果滑动则随机添加一个随机数
         if (merge){
             addRandomNum();
+            checkComplete();
+        }
+    }
+
+    /**
+     * 判断游戏是否结束逻辑函数
+     */
+    private void checkComplete(){
+        boolean complete = true;//判断游戏是否结束标志
+
+        ALL:
+        for (int y=0; y<4; y++){
+            for (int x=0; x<4; x++){
+                //游戏尚未结束的五种情况
+                if (cardMap[x][y].getNum()==0||
+                        (x>0&&cardMap[x][y].equals(cardMap[x-1][y]))||
+                        (x<3&&cardMap[x][y].equals(cardMap[x+1][y]))||
+                        (y>0&&cardMap[x][y].equals(cardMap[x][y-1]))||
+                        (y<3&&cardMap[x][y].equals(cardMap[x][y+1]))){
+                    complete = false;
+                    break ALL;
+                }
+            }
+        }
+
+
+        //游戏结束对话框
+        if (complete){
+            new AlertDialog.Builder(getContext()).setTitle("你好").setMessage("游戏结束").setPositiveButton("重来", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    startGame();
+                }
+            }).show();
         }
     }
 
