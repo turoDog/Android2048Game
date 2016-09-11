@@ -1,10 +1,14 @@
 package com.turo.game2048;
 
 import android.content.Context;
+import android.graphics.Point;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.GridLayout;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by YQ950209 on 2016/9/10.
@@ -79,6 +83,8 @@ public class GameView extends GridLayout {
 
         addCards(cardWidth,cardWidth);          //添加卡片方法
 
+        startGame();
+
     }
 
     private void addCards(int cardWidth, int cardHeight){
@@ -86,13 +92,37 @@ public class GameView extends GridLayout {
         for (int y = 0; y < 4; y++){
             for (int x =0; x < 4; x++ ){
                 c = new Card(getContext());
-                c.setNum(2);
+                c.setNum(0);
                 addView(c, cardWidth, cardHeight);//添加16个卡片到GameView中
 
                 cardMap[x][y] = c;
             }
         }
 
+    }
+
+    private void startGame(){
+        for (int y = 0; y < 4; y++){
+            for (int x=0; x<4; x++){
+                cardMap[x][y].setNum(0);
+            }
+        }
+
+        addRandomNum();
+        addRandomNum();
+    }
+
+    private void addRandomNum (){
+        emptyPoints.clear();
+        for (int y = 0; y < 4; y++){
+            for (int x = 0; x < 4; x++){
+                if (cardMap[x][y].getNum()<=0){
+                    emptyPoints.add(new Point(x,y));
+                }
+            }
+        }
+        Point p = emptyPoints.remove((int) ((Math.random()*emptyPoints.size())));
+        cardMap[p.x][p.y].setNum(Math.random()>0.1?2:4);
     }
 
     private void slideLeft() {
@@ -111,6 +141,7 @@ public class GameView extends GridLayout {
     }
 
     private Card[][] cardMap = new Card[4][4];
+    private List<Point> emptyPoints = new ArrayList<Point>();
 
 }
 
